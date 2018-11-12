@@ -4,7 +4,7 @@
   "description": "Common libraries for database access",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npx babel index.js -o dist/index.js"
+    "build": "./build.sh"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,8 @@
     "@babel/preset-flow": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "eslint-plugin-flowtype": "^3.2.0",
+    "flow-bin": "^0.86.0",
+    "flow-typed": "^2.5.1",
     "prettier-eslint": "^8.8.2"
   }
 }

@@ -1,5 +1,5 @@
 // @flow strict
-import type { Pool, PoolClient, ResultSet } from "pg"
+import type {Pool, PoolClient, ResultSet} from 'pg'
 
 export type DbTransactionCommands = (dbClient: PoolClient) => Promise<mixed>
 
