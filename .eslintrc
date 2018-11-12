@@ -1,0 +1,16 @@
+{
+  "env": {
+    "es6": true,
+    "jest": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "extends": ["eslint:recommended", "plugin:flowtype/recommended"],
+  "plugins": ["flowtype"],
+  "rules": {
+    "semi": ["error", "never"],
+    "object-curly-spacing": ["error", "never"],
+    "max-len": ["error", {"code": 90}],
+    "quotes": ["error", "single", {"avoidEscape": true, "allowTemplateLiterals": true}]
+  }
+}
