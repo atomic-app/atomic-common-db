@@ -25,26 +25,10 @@ export const getDBHelper = (connectionString: string) => {
       // $FlowFixMe
       const result = await getDatabase().query(sql)
 
-      await Promise.all(
-        result.rows.map(table =>
-          getDatabase().query(
-            `ALTER TABLE ${schema}.${table['table_name']} DISABLE TRIGGER ALL`
-          )
-        )
-      )
-
-      await Promise.all(
-        result.rows.map(table =>
-          getDatabase().query(`DELETE FROM ${schema}.${table['table_name']} CASCADE`)
-        )
-      )
-
-      await Promise.all(
-        result.rows.map(table =>
-          getDatabase().query(
-            `ALTER TABLE ${schema}.${table['table_name']} ENABLE TRIGGER ALL`
-          )
-        )
+      return await getDatabase().query(
+        `TRUNCATE TABLE ${result.rows
+          .map(table => `${schema}.${table['table_name']}`)
+          .join(', ')} RESTART IDENTITY`
       )
     },
     async disconnect() {
