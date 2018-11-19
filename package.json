@@ -1,6 +1,6 @@
 {
   "name": "atomic-common-db",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Common libraries for database access",
   "main": "dist/index.js",
   "scripts": {
