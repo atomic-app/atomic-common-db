@@ -31,6 +31,9 @@ export const getDBHelper = (connectionString: string) => {
         )
       )
     },
+    async disconnect() {
+      return await getDatabase().disconnect()
+    },
     async insert<T>(table: string, data: T) {
       if (data !== null && typeof data === 'object') {
         const columns = Object.keys(data).join(',')

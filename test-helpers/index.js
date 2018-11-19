@@ -31,6 +31,10 @@ const getDBHelper = connectionString => {
       return await Promise.all(result.rows.map(table => getDatabase().query(`DELETE FROM ${schema}.${table['table_name']}`)));
     },
 
+    async disconnect() {
+      return await getDatabase().disconnect();
+    },
+
     async insert(table, data) {
       if (data !== null && typeof data === 'object') {
         const columns = Object.keys(data).join(',');
