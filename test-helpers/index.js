@@ -29,7 +29,8 @@ const getDBHelper = connectionString => {
 
       const result = await getDatabase().query(sql);
       await Promise.all(result.rows.map(table => getDatabase().query(`ALTER TABLE ${schema}.${table['table_name']} DISABLE TRIGGER ALL`)));
-      return await Promise.all(result.rows.map(table => getDatabase().query(`DELETE FROM ${schema}.${table['table_name']} CASCADE`)));
+      await Promise.all(result.rows.map(table => getDatabase().query(`DELETE FROM ${schema}.${table['table_name']} CASCADE`)));
+      await Promise.all(result.rows.map(table => getDatabase().query(`ALTER TABLE ${schema}.${table['table_name']} ENABLE TRIGGER ALL`)));
     },
 
     async disconnect() {

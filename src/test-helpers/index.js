@@ -33,9 +33,17 @@ export const getDBHelper = (connectionString: string) => {
         )
       )
 
-      return await Promise.all(
+      await Promise.all(
         result.rows.map(table =>
           getDatabase().query(`DELETE FROM ${schema}.${table['table_name']} CASCADE`)
+        )
+      )
+
+      await Promise.all(
+        result.rows.map(table =>
+          getDatabase().query(
+            `ALTER TABLE ${schema}.${table['table_name']} ENABLE TRIGGER ALL`
+          )
         )
       )
     },
