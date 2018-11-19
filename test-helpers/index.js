@@ -28,7 +28,8 @@ const getDBHelper = connectionString => {
       // $FlowFixMe
 
       const result = await getDatabase().query(sql);
-      return await Promise.all(result.rows.map(table => getDatabase().query(`DELETE FROM ${schema}.${table['table_name']}`)));
+      await Promise.all(result.rows.map(table => getDatabase().query(`ALTER TABLE ${schema}.${table['table_name']} DISABLE TRIGGER ALL`)));
+      return await Promise.all(result.rows.map(table => getDatabase().query(`DELETE FROM ${schema}.${table['table_name']} CASCADE`)));
     },
 
     async disconnect() {
@@ -37,18 +38,22 @@ const getDBHelper = connectionString => {
 
     async insert(table, data) {
       if (data !== null && typeof data === 'object') {
-        const columns = Object.keys(data).join(',');
-        const values = Object.values(data).map(value => {
-          return typeof value === 'string' ? `'${value}'` : value;
-        }).join(',');
+        const columns = Object.keys(data);
+        const returnedColumns = columns.slice();
+        const values = Object.values(data); // always return the id
+
+        if (returnedColumns.indexOf('id') === -1) {
+          returnedColumns.push('id');
+        }
+
         const sql = `
           INSERT INTO ${table}
-            (${columns})
+            (${columns.join(',')})
           VALUES
-            (${values})
-          RETURNING id, ${columns}
+            (${values.map((val, i) => `$${i + 1}`).join(',')})
+          RETURNING ${returnedColumns.join(',')}
         `;
-        const result = await getDatabase().query(sql);
+        const result = await getDatabase().query(sql, values);
         return result.rows;
       } else {
         throw new Error('You must provide an Object to insert');
