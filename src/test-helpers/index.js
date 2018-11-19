@@ -36,21 +36,23 @@ export const getDBHelper = (connectionString: string) => {
     },
     async insert<T>(table: string, data: T) {
       if (data !== null && typeof data === 'object') {
-        const columns = Object.keys(data).join(',')
+        const columns = Object.keys(data)
+        const returnedColumns = columns.slice()
         const values = Object.values(data)
-          .map(value => {
-            return typeof value === 'string' ? `'${value}'` : value
-          })
-          .join(',')
+
+        // always return the id
+        if (returnedColumns.indexOf('id') === -1) {
+          returnedColumns.push('id')
+        }
 
         const sql = `
           INSERT INTO ${table}
-            (${columns})
+            (${columns.join(',')})
           VALUES
-            (${values})
-          RETURNING id, ${columns}
+            (${values.map((val, i) => `$${i + 1}`).join(',')})
+          RETURNING ${returnedColumns.join(',')}
         `
-        const result = await getDatabase().query(sql)
+        const result = await getDatabase().query(sql, values)
         return result.rows
       } else {
         throw new Error('You must provide an Object to insert')
