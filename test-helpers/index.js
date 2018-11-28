@@ -20,6 +20,10 @@ const getDBHelper = connectionString => {
   };
 
   return {
+    async query(sql, values) {
+      return await getDatabase().query(sql, values);
+    },
+
     async clean(schema) {
       const sql = `
         SELECT table_name FROM information_schema.tables
