@@ -15,8 +15,8 @@ export const getDBHelper = (connectionString: string) => {
   }
 
   return {
-    async query(sql: string) {
-      return await getDatabase().query(sql)
+    async query(sql: string, values: Array<mixed>) {
+      return await getDatabase().query(sql, values)
     },
     async clean(schema: string) {
       const sql = `

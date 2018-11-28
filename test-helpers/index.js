@@ -20,8 +20,8 @@ const getDBHelper = connectionString => {
   };
 
   return {
-    async query(sql) {
-      return await getDatabase().query(sql);
+    async query(sql, values) {
+      return await getDatabase().query(sql, values);
     },
 
     async clean(schema) {
