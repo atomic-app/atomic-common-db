@@ -62,14 +62,16 @@ export function getDb(connectionString: string): DbWrapper {
   }
 }
 
+const DB_VARNAME = process.env.NODE_ENV === 'test' ? 'TEST_DB_URL' : 'DB_URL'
+
 let defaultDb
 export function getDefaultDb(): DbWrapper {
-  if (typeof process.env.DB_URL === 'undefined' || process.env.DB_URL === '') {
-    throw new Error('DB_URL not provided')
+  if (typeof process.env[DB_VARNAME] === 'undefined' || process.env[DB_VARNAME] === '') {
+    throw new Error(`${DB_VARNAME} not provided`)
   }
 
   if (!defaultDb) {
-    defaultDb = getDb(String(process.env.DB_URL))
+    defaultDb = getDb(String(process.env[DB_VARNAME]))
   }
 
   return defaultDb
