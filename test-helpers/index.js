@@ -32,6 +32,11 @@ const getDBHelper = connectionString => {
       // $FlowFixMe
 
       const result = await getDatabase().query(sql);
+
+      if (!result.rows.length) {
+        return;
+      }
+
       return await getDatabase().query(`TRUNCATE TABLE ${result.rows.map(table => `${schema}.${table['table_name']}`).join(', ')} RESTART IDENTITY`);
     },
 
